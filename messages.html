@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Secret Messages 🔒</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-50:#fff5f8;--pink-100:#ffe6ee;--pink-200:#ffd0de;--pink-300:#ffb3c9;--pink-400:#ff8fb1;--pink-600:#d9527f;
+    --cocoa:#6b4a3a;--cocoa-soft:#9a7664;--shadow:0 12px 30px rgba(217,82,127,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Fredoka',system-ui,sans-serif;color:var(--cocoa);min-height:100vh;
+    background:radial-gradient(circle at 15% 10%,var(--pink-200) 0,transparent 40%),linear-gradient(180deg,var(--pink-50),var(--pink-100));
+    background-attachment:fixed;padding:32px 18px 60px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .script{font-family:'Pacifico',cursive;font-weight:400}
+  h1{color:var(--pink-600);text-align:center;font-size:2rem;margin-bottom:6px}
+  .sub{text-align:center;color:var(--cocoa-soft);margin-bottom:22px}
+  .card{background:rgba(255,255,255,.88);border:2px dashed var(--pink-300);border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+  .center{text-align:center}
+  input{font-family:inherit;font-size:1rem;padding:12px 14px;border-radius:16px;border:2px solid var(--pink-200);outline:none;width:100%;color:var(--cocoa);margin:12px 0}
+  input:focus{border-color:var(--pink-400)}
+  .btn{display:inline-block;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:500;padding:10px 20px;border-radius:999px;background:var(--pink-400);color:#fff;text-decoration:none;box-shadow:0 4px 0 var(--pink-600);transition:transform .1s,box-shadow .1s}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pink-600)}
+  .btn.alt{background:#fff;color:var(--pink-600);border:2px solid var(--pink-300);box-shadow:0 4px 0 var(--pink-300)}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .count{font-weight:600;color:var(--pink-600)}
+  .msg{background:#fff;border:2px solid var(--pink-200);border-radius:20px;padding:16px 18px;margin-bottom:12px}
+  .msg-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:6px}
+  .msg-name{font-weight:600;color:var(--pink-600)}
+  .msg-time{font-size:.78rem;color:var(--cocoa-soft)}
+  .msg-body{white-space:pre-wrap;word-break:break-word}
+  .msg-del{background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--cocoa-soft);margin-top:8px;font-family:inherit;text-decoration:underline}
+  .empty{text-align:center;color:var(--cocoa-soft);padding:30px 0}
+  .banner{background:#fff3d6;border:2px solid #ffd98a;border-radius:16px;padding:10px 14px;font-size:.85rem;margin-bottom:14px}
+  .err{color:var(--pink-600);font-size:.9rem;min-height:1.2em}
+  .hidden{display:none !important}
+  .back{display:block;text-align:center;margin-top:22px;color:var(--pink-600)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="script">Bday Messages 🐹</h1>
+  <p class="sub">mga magagandang words mula sa imong hato family 💕</p>
+
+  <!-- passcode gate -->
+  <div class="card center" id="gate">
+    <div style="font-size:2.4rem">🔒</div>
+    <p>Enter the passcode to peek</p>
+    <input type="password" id="pass" placeholder="Passcode" autocomplete="off">
+    <p style="font-size:.85rem;color:var(--cocoa-soft)"><b>Hint:</b> bread/pastry</p><p class="err" id="gateErr"></p>
+    
+    <button class="btn" id="unlockBtn" type="button">Unlock</button>
+  </div>
+
+  <!-- board -->
+  <div id="board" class="hidden">
+    <div class="banner hidden" id="demoBanner">
+      Demo mode: messages are only saved in the browser that sent them. Set <b>dbUrl</b> in <b>shared.js</b> to collect messages from all guests.
+    </div>
+    <div class="bar">
+      <span class="count" id="count"></span>
+      <span style="display:flex;gap:8px">
+        <button class="btn alt" id="refreshBtn" type="button">↻ Refresh</button>
+        <button class="btn alt" id="lockBtn" type="button">Lock</button>
+      </span>
+    </div>
+    <p class="err" id="boardErr"></p>
+    <div id="list"></div>
+  </div>
+
+  <a class="back" href="index.html">← Back to the invitation</a>
+</div>
+
+<script src="shared.js"></script>
+<script>
+const SKEY = 'bday_admin_ok';
+const gate = document.getElementById('gate'), board = document.getElementById('board');
+const list = document.getElementById('list');
+
+function unlock(){
+  gate.classList.add('hidden'); board.classList.remove('hidden');
+  document.getElementById('demoBanner').classList.toggle('hidden', MessageStore.mode()==='online');
+  load();
+}
+function tryUnlock(){
+  const v = document.getElementById('pass').value;
+  if(v === SHARED.adminPasscode){
+    try{ sessionStorage.setItem(SKEY,'1'); }catch(_){}
+    unlock();
+  } else {
+    document.getElementById('gateErr').textContent = 'Wrong passcode 🙈';
+  }
+}
+document.getElementById('unlockBtn').addEventListener('click', tryUnlock);
+document.getElementById('pass').addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+document.getElementById('lockBtn').addEventListener('click', ()=>{
+  try{ sessionStorage.removeItem(SKEY); }catch(_){}
+  location.reload();
+});
+document.getElementById('refreshBtn').addEventListener('click', load);
+
+async function load(){
+  const err = document.getElementById('boardErr'); err.textContent = '';
+  list.innerHTML = '<p class="empty">Loading…</p>';
+  try{
+    const msgs = await MessageStore.list();
+    document.getElementById('count').textContent = msgs.length + (msgs.length===1 ? ' message' : ' messages');
+    list.innerHTML = '';
+    if(!msgs.length){ list.innerHTML = '<p class="empty">No messages yet 🐹<br>Check back soon!</p>'; return; }
+    msgs.forEach(m=>{
+      const el = document.createElement('div'); el.className = 'msg';
+      const head = document.createElement('div'); head.className = 'msg-head';
+      const n = document.createElement('span'); n.className = 'msg-name'; n.textContent = m.name || 'Anonymous';
+      const t = document.createElement('span'); t.className = 'msg-time';
+      t.textContent = m.ts ? new Date(m.ts).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : '';
+      head.append(n, t);
+      const b = document.createElement('div'); b.className = 'msg-body'; b.textContent = m.message || '';
+      const d = document.createElement('button'); d.className = 'msg-del'; d.type = 'button'; d.textContent = 'delete';
+      d.addEventListener('click', async ()=>{
+        if(!confirm('Delete this message?')) return;
+        try{ await MessageStore.remove(m.id); load(); }catch(_){ err.textContent = 'Could not delete. Try again.'; }
+      });
+      el.append(head, b, d);
+      list.appendChild(el);
+    });
+  }catch(_){
+    list.innerHTML = '';
+    err.textContent = "Couldn't load messages. Check the dbUrl in shared.js and your database rules.";
+  }
+}
+
+try{ if(sessionStorage.getItem(SKEY)==='1') unlock(); }catch(_){}
+</script>
+</body>
+</html>

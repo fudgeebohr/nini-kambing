@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're Invited! 🎀</title>
+<meta name="description" content="Join us for a pastel pink birthday celebration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-50:#fff5f8;
+    --pink-100:#ffe6ee;
+    --pink-200:#ffd0de;
+    --pink-300:#ffb3c9;
+    --pink-400:#ff8fb1;
+    --pink-600:#d9527f;
+    --cocoa:#6b4a3a;
+    --cocoa-soft:#9a7664;
+    --capy:#c9a27a;
+    --capy-dark:#b08660;
+    --cream:#fffaf5;
+    --shadow:0 12px 30px rgba(217,82,127,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Fredoka',system-ui,sans-serif;
+    color:var(--cocoa);
+    background:
+      radial-gradient(circle at 15% 10%, var(--pink-200) 0, transparent 40%),
+      radial-gradient(circle at 85% 30%, #ffe0ea 0, transparent 45%),
+      linear-gradient(180deg,var(--pink-50),var(--pink-100));
+    background-attachment:fixed;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-weight:600}
+  .script{font-family:'Pacifico',cursive;font-weight:400}
+  section{padding:56px 20px;max-width:760px;margin:0 auto;position:relative;z-index:2}
+  .card{
+    background:rgba(255,255,255,.85);
+    border:2px dashed var(--pink-300);
+    border-radius:28px;
+    padding:28px 24px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(4px);
+  }
+  .section-title{
+    text-align:center;font-size:1.9rem;color:var(--pink-600);margin-bottom:24px;
+  }
+  .section-title small{display:block;font-size:.95rem;color:var(--cocoa-soft);font-weight:400;margin-top:4px}
+
+  /* floating decorations */
+  #floaters{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .floater{position:absolute;bottom:-40px;opacity:.7;animation:rise linear infinite}
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0);opacity:0}
+    10%{opacity:.75}
+    100%{transform:translateY(-115vh) rotate(25deg);opacity:0}
+  }
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+
+  /* envelope intro */
+  #intro{
+    position:fixed;inset:0;z-index:100;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:linear-gradient(180deg,var(--pink-100),var(--pink-200));
+    transition:opacity .8s ease, visibility .8s;
+    padding:20px;text-align:center;
+  }
+  #intro.gone{opacity:0;visibility:hidden}
+  .envelope{
+    position:relative;width:min(300px,78vw);height:200px;cursor:pointer;
+    filter:drop-shadow(0 14px 22px rgba(217,82,127,.3));
+    animation:bob 2.4s ease-in-out infinite;
+  }
+  @keyframes bob{50%{transform:translateY(-8px)}}
+  .env-back{position:absolute;inset:0;background:var(--pink-300);border-radius:14px}
+  .env-letter{
+    position:absolute;left:10%;right:10%;top:10%;height:80%;background:#fff;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:2.4rem;
+    transition:transform .7s ease .3s;
+  }
+  .env-front{
+    position:absolute;inset:0;border-radius:14px;overflow:hidden;
+  }
+  .env-front::before,.env-front::after{content:"";position:absolute;bottom:0;border-style:solid}
+  .env-front::before{left:0;border-width:100px 150px 0 0;border-color:transparent var(--pink-200) transparent transparent;
+    border-width:0 0 200px 150px;border-color:transparent transparent var(--pink-200) transparent;width:0;height:0}
+  .env-front::after{right:0;border-width:0 150px 200px 0;border-color:transparent var(--pink-200) transparent transparent;width:0;height:0}
+  .env-flap{
+    position:absolute;top:0;left:0;width:100%;height:60%;
+    background:var(--pink-400);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top;transition:transform .6s ease;
+    z-index:3;
+  }
+  .env-seal{
+    position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:4;
+    width:46px;height:46px;border-radius:50%;background:var(--pink-600);color:#fff;
+    display:grid;place-items:center;font-size:1.3rem;transition:opacity .3s;
+  }
+  #intro.opening .env-flap{transform:rotateX(180deg);z-index:0}
+  #intro.opening .env-seal{opacity:0}
+  #intro.opening .env-letter{transform:translateY(-70px)}
+  .intro-text{color:var(--pink-600);font-size:1.4rem}
+  .intro-sub{color:var(--cocoa-soft);font-size:.95rem}
+
+  /* hero */
+  .hero{text-align:center;padding-top:40px}
+  .eyebrow{letter-spacing:.25em;text-transform:uppercase;font-size:.8rem;color:var(--cocoa-soft)}
+  .hero h1{font-size:clamp(2.6rem,10vw,4.2rem);color:var(--pink-600);line-height:1.1;margin:10px 0 6px}
+  .hero .sub{font-size:1.15rem;color:var(--cocoa-soft)}
+  .age{
+    display:inline-grid;place-items:center;width:74px;height:74px;border-radius:50%;
+    background:var(--pink-300);color:#fff;font-size:2rem;font-weight:600;margin-top:16px;
+    box-shadow:0 6px 0 var(--pink-400);
+  }
+  .capy-wrap{width:min(280px,70vw);margin:10px auto 0;position:relative;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  .capy-wrap svg{width:100%;height:auto;display:block;animation:sway 3.5s ease-in-out infinite;transform-origin:50% 90%}
+  @keyframes sway{50%{transform:rotate(2.5deg)}}
+  .capy-wrap:active svg{transform:scale(.97)}
+  .eye{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
+  @keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+  .bubble{
+    position:absolute;top:-6px;left:50%;transform:translate(-50%,-100%) scale(.6);opacity:0;
+    background:#fff;border:2px solid var(--pink-300);border-radius:18px;padding:8px 14px;
+    font-size:.95rem;white-space:nowrap;box-shadow:var(--shadow);transition:all .25s ease;pointer-events:none;
+  }
+  .bubble::after{content:"";position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:#fff;
+    border-right:2px solid var(--pink-300);border-bottom:2px solid var(--pink-300);transform:translateX(-50%) rotate(45deg)}
+  .bubble.show{opacity:1;transform:translate(-50%,-100%) scale(1)}
+  .tap-hint{font-size:.85rem;color:var(--cocoa-soft);margin-top:6px}
+
+  /* countdown */
+  .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center}
+  .cd-box{background:var(--pink-100);border-radius:20px;padding:16px 4px}
+  .cd-num{font-size:2.1rem;font-weight:600;color:var(--pink-600);line-height:1}
+  .cd-lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--cocoa-soft);margin-top:6px}
+  .cd-done{grid-column:1/-1;font-size:1.5rem;color:var(--pink-600);padding:10px}
+
+  /* details */
+  .details{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .detail{text-align:center;padding:10px}
+  .detail .ico{font-size:2rem}
+  .detail h3{color:var(--pink-600);margin:6px 0 4px;font-size:1.1rem}
+  .detail p{color:var(--cocoa)}
+  .btn{
+    display:inline-block;border:none;cursor:pointer;font-family:inherit;font-size:1rem;font-weight:500;
+    padding:12px 22px;border-radius:999px;background:var(--pink-400);color:#fff;text-decoration:none;
+    box-shadow:0 5px 0 var(--pink-600);transition:transform .1s, box-shadow .1s;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--pink-600)}
+  .btn:disabled{opacity:.7;cursor:default}
+  .btn.alt{background:#fff;color:var(--pink-600);box-shadow:0 5px 0 var(--pink-300);border:2px solid var(--pink-300)}
+
+  /* schedule */
+  .timeline{list-style:none;position:relative;padding-left:28px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;border-left:3px dotted var(--pink-300)}
+  .timeline li{position:relative;padding:8px 0 14px}
+  .timeline li::before{content:"";position:absolute;left:-26px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--pink-400);border:3px solid #fff;box-shadow:0 0 0 2px var(--pink-300)}
+  .t-time{font-weight:600;color:var(--pink-600)}
+  .t-desc{color:var(--cocoa)}
+
+  /* dress code */
+  .swatches{display:flex;gap:12px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .swatch{width:46px;height:46px;border-radius:50%;border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.12)}
+  .center{text-align:center}
+
+  /* message form */
+  form{display:grid;gap:16px}
+  label{font-weight:500;font-size:.95rem;display:grid;gap:6px}
+  input,select,textarea{
+    font-family:inherit;font-size:1rem;color:var(--cocoa);
+    padding:12px 14px;border-radius:16px;border:2px solid var(--pink-200);background:#fff;outline:none;width:100%;
+  }
+  textarea{resize:vertical}
+  input:focus,select:focus,textarea:focus{border-color:var(--pink-400)}
+  .hidden{display:none !important}
+  .thanks{text-align:center;padding:10px}
+  .thanks .big{font-size:3rem}
+  .thanks .btn{margin-top:14px}
+  .note{font-size:.8rem;color:var(--cocoa-soft);text-align:center;margin-top:8px}
+
+  footer{text-align:center;padding:30px 20px 60px;color:var(--cocoa-soft);position:relative;z-index:2}
+  footer .script{color:var(--pink-600);font-size:1.3rem}
+  /* secret button: barely visible paw that opens the messages page */
+  .secret{
+    display:inline-block;margin-top:14px;background:none;border:none;cursor:pointer;
+    font-size:1.1rem;opacity:.18;transition:opacity .2s;text-decoration:none;
+  }
+  .secret:hover,.secret:focus-visible{opacity:.8}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+<div id="floaters" aria-hidden="true"></div>
+
+<!-- ENVELOPE INTRO -->
+<div id="intro">
+  <div class="intro-text script">You've got mail!</div>
+  <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open invitation">
+    <div class="env-back"></div>
+    <div class="env-letter">🐹</div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <div class="env-seal">♥</div>
+  </div>
+  <div class="intro-sub">Tap the envelope to open</div>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <p class="eyebrow" data-k="eyebrow"></p>
+    <h1 class="script" data-k="name"></h1>
+    <p class="sub" data-k="tagline"></p>
+    <div class="age" data-k="age"></div>
+
+    <div class="capy-wrap" id="capy" aria-label="A friendly capybara. Tap me!" role="button" tabindex="0">
+      <div class="bubble" id="bubble"></div>
+      <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <!-- body -->
+        <ellipse cx="120" cy="190" rx="78" ry="44" fill="#c9a27a"/>
+        <ellipse cx="120" cy="204" rx="50" ry="26" fill="#e3c7a5"/>
+        <!-- feet -->
+        <ellipse cx="78" cy="228" rx="20" ry="9" fill="#b08660"/>
+        <ellipse cx="162" cy="228" rx="20" ry="9" fill="#b08660"/>
+        <!-- balloon-ish present / cake nub in paws -->
+        <rect x="96" y="176" width="48" height="34" rx="8" fill="#ffb3c9"/>
+        <rect x="96" y="188" width="48" height="6" fill="#ff8fb1"/>
+        <rect x="116" y="176" width="8" height="34" fill="#ff8fb1"/>
+        <path d="M120 176 q-14 -16 -22 -4 q8 10 22 4 q14 6 22 -4 q-8 -12 -22 4z" fill="#ff8fb1"/>
+        <!-- paws -->
+        <ellipse cx="92" cy="198" rx="12" ry="9" fill="#b08660"/>
+        <ellipse cx="148" cy="198" rx="12" ry="9" fill="#b08660"/>
+        <!-- ears -->
+        <circle cx="62" cy="68" r="15" fill="#b08660"/><circle cx="62" cy="68" r="8" fill="#ffb3c9"/>
+        <circle cx="178" cy="68" r="15" fill="#b08660"/><circle cx="178" cy="68" r="8" fill="#ffb3c9"/>
+        <!-- head -->
+        <rect x="46" y="58" width="148" height="118" rx="58" fill="#c9a27a"/>
+        <!-- snout -->
+        <rect x="76" y="112" width="88" height="62" rx="30" fill="#b88e66"/>
+        <ellipse cx="108" cy="124" rx="5" ry="7" fill="#5a3b2b"/>
+        <ellipse cx="132" cy="124" rx="5" ry="7" fill="#5a3b2b"/>
+        <path d="M104 148 q16 14 32 0" stroke="#5a3b2b" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- eyes -->
+        <g class="eye"><circle cx="86" cy="98" r="7" fill="#3f2a20"/><circle cx="88.5" cy="95.5" r="2.4" fill="#fff"/></g>
+        <g class="eye"><circle cx="154" cy="98" r="7" fill="#3f2a20"/><circle cx="156.5" cy="95.5" r="2.4" fill="#fff"/></g>
+        <!-- blush -->
+        <ellipse cx="68" cy="124" rx="12" ry="7" fill="#ff9fbd" opacity=".7"/>
+        <ellipse cx="172" cy="124" rx="12" ry="7" fill="#ff9fbd" opacity=".7"/>
+        <!-- party hat -->
+        <polygon points="120,6 92,62 148,62" fill="#ffb3c9"/>
+        <polygon points="120,6 106,34 134,34" fill="#ffd0de"/>
+        <path d="M94 56 h52" stroke="#ff8fb1" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="120" cy="8" r="8" fill="#fff"/>
+        <!-- yuzu on head -->
+        <circle cx="170" cy="62" r="11" fill="#ffc86b"/>
+        <path d="M170 51 q5 -6 9 -3 q-3 6 -9 3z" fill="#8fc98a"/>
+      </svg>
+    </div>
+    <p class="tap-hint">psst… tap the capybara 🎀</p>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="reveal">
+    <h2 class="section-title script">The party starts in…</h2>
+    <div class="card">
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="cd-box"><div class="cd-num" id="cd-d">0</div><div class="cd-lbl">Days</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-h">0</div><div class="cd-lbl">Hours</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-m">0</div><div class="cd-lbl">Mins</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-s">0</div><div class="cd-lbl">Secs</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DETAILS -->
+  <section class="reveal" id="details">
+    <h2 class="section-title script">Sabihin mo<small data-k="detailsNote"></small></h2>
+    <div class="card">
+      <div class="details">
+        <div class="detail"><div class="ico">📅</div><h3>kelan sya dalahen?</h3><p data-k="dateText"></p><p data-k="timeText"></p></div>
+        <div class="detail"><div class="ico">📍</div><h3>saan sya dalahen?</h3><p data-k="venueName"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="reveal">
+    <h2 class="section-title script">Ganito plano...</h2>
+    <div class="card"><ul class="timeline" id="timeline"></ul></div>
+  </section>
+
+  <!-- DRESS CODE -->
+  <section class="reveal">
+    <h2 class="section-title script">Dress Code</h2>
+    <div class="card center">
+      <p data-k="dressText"></p>
+      <div class="swatches" id="swatches"></div>
+      <p class="note" data-k="giftNote" style="margin-top:18px"></p>
+    </div>
+  </section>
+
+  <!-- MESSAGES -->
+  <section class="reveal" id="messages">
+    <h2 class="section-title script">Leave a message<small data-k="messageNote"></small></h2>
+    <div class="card">
+      <form id="msgForm" novalidate>
+        <label>cnu k?
+          <input type="text" id="nameInput" placeholder="imong ngalan" maxlength="60" autocomplete="name">
+        </label>
+        <label>ur message
+          <textarea id="msgInput" rows="4" maxlength="500" placeholder="magagandang words n gusto mo sabihin~"></textarea>
+        </label>
+        <button class="btn" type="submit" id="submitBtn">Send message 💌</button>
+        <p class="note" id="formError" style="color:var(--pink-600)"></p>
+      </form>
+      <div class="thanks hidden" id="thanks">
+        <div class="big">🐹💕</div>
+        <h3 class="script" style="color:var(--pink-600);font-size:1.6rem;margin:8px 0">Thank you!</h3>
+        <p id="thanksMsg"></p>
+        <button class="btn alt" type="button" id="againBtn">Send another</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p class="script" data-k="footerScript"></p>
+  <p data-k="footerSmall"></p>
+  <a class="secret" href="messages.html" aria-label="Open messages (host only)" title="🐾">🐾</a>
+</footer>
+
+<audio id="backgroundMusic" src="audio/kambing.mp3" loop preload="auto"></audio>
+
+<script src="shared.js"></script>
+<script>
+/* ============================================================
+   ✏️  EDIT YOUR CONTENT HERE — everything on the page comes from this block
+   (message storage + secret passcode settings live in shared.js)
+   ============================================================ */
+const CONFIG = {
+  eyebrow: "You're invited to celebrate",
+  name: "Nini's Birthday 🎀",
+  tagline: "panini is turning another year cuter!",
+  age: "24",
+
+  // Party start — ISO format with timezone offset (Manila = +08:00)
+  eventDateISO: "2026-10-17T15:00:00+08:00",
+  dateText: "Saturday, October 17, 2026",
+  timeText: "8:00 PM – 11:30 PM",
+  venueName: "Private Town (Pass: kambing)",
+  detailsNote: "saan (at kelan) mo sya dalahen??",
+
+  program: [
+    { time: "8:00 PM", desc: "ma'am, may nagsusuntukan po sa classroom" },
+    { time: "8:30 PM", desc: "hala sino??!!" },
+    { time: "10:00 PM", desc: "si miro po ma'am, nag-aamok" },
+    { time: "11:00 PM", desc: "/pagdating sa classroom/" },
+    { time: "11:30 PM", desc: "ANG AWITING ITO'Y PARA SAYOOO" }
+  ],
+
+  dressText: "Wear something soft & pastel — pink, cream, or earthy brown!",
+  swatchColors: ["#ffd0de", "#ffb3c9", "#fff5f8", "#e3c7a5", "#c9a27a"],
+  giftNote: "ganda colors, fenk n capybara",
+
+  messageNote: "sabihan nyo sha ng mga magagandang words",
+  thanksMsg: "salamatsomuchmwaaahhh! 🐹💕",
+
+  capySays: [
+    "bday po nya ngayon!",
+    "bday nya? yes po",
+    "happy na birthday mo pa",
+    "HBD nini kambing",
+    "nini panini habaduu",
+    "attend kau plz, iiyak aq",
+    "di to ma-lag pramis",
+    "pektyur pektyur, kaen kaen"
+  ],
+
+  footerScript: "ang dili pomonta, dili makaigit",
+  footerSmall: "any any ni jamiro"
+};
+/* ============================================================ */
+
+// ---------- fill content ----------
+document.querySelectorAll('[data-k]').forEach(el=>{
+  const v = CONFIG[el.dataset.k];
+  if(v!==undefined) el.textContent = v;
+});
+document.title = "You're invited! " + CONFIG.name;
+
+const tl = document.getElementById('timeline');
+CONFIG.program.forEach(p=>{
+  const li = document.createElement('li');
+  li.innerHTML = '<div class="t-time"></div><div class="t-desc"></div>';
+  li.children[0].textContent = p.time;
+  li.children[1].textContent = p.desc;
+  tl.appendChild(li);
+});
+const sw = document.getElementById('swatches');
+CONFIG.swatchColors.forEach(c=>{
+  const d = document.createElement('div'); d.className='swatch'; d.style.background=c; d.title=c; sw.appendChild(d);
+});
+
+// ---------- envelope intro ----------
+const intro = document.getElementById('intro');
+function openIntro(){
+  if(intro.classList.contains('opening')) return;
+
+  document.getElementById('backgroundMusic').play().catch(error => {
+    console.warn('Audio could not start:', error);
+  });
+
+  intro.classList.add('opening');
+  setTimeout(()=>{ intro.classList.add('gone'); burst(window.innerWidth/2, window.innerHeight/3, 90); }, 1100);
+}
+const env = document.getElementById('envelope');
+env.addEventListener('click', openIntro);
+env.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openIntro(); }});
+
+// ---------- floating hearts & sparkles ----------
+const floaters = document.getElementById('floaters');
+const icons = ['💗','🌸','✨','🎀','🤍','🍊'];
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){
+  for(let i=0;i<16;i++){
+    const s = document.createElement('span');
+    s.className='floater';
+    s.textContent = icons[i%icons.length];
+    s.style.left = Math.random()*100+'vw';
+    s.style.fontSize = (14+Math.random()*20)+'px';
+    s.style.animationDuration = (14+Math.random()*16)+'s';
+    s.style.animationDelay = (-Math.random()*20)+'s';
+    floaters.appendChild(s);
+  }
+}
+
+// ---------- confetti ----------
+const cv = document.getElementById('confetti'), ctx = cv.getContext('2d');
+let parts = [], raf = null;
+function resize(){ cv.width = innerWidth; cv.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+const colors = ['#ffb3c9','#ff8fb1','#ffd0de','#fff','#e3c7a5','#ffc86b','#d9527f'];
+function burst(x,y,n=60){
+  if(reduce) return;
+  for(let i=0;i<n;i++){
+    const a = Math.random()*Math.PI*2, sp = 3+Math.random()*7;
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-4,g:.18,s:5+Math.random()*6,
+      c:colors[Math.floor(Math.random()*colors.length)],r:Math.random()*6,vr:(Math.random()-.5)*.4,life:100+Math.random()*60,
+      heart:Math.random()<.25});
+  }
+  if(!raf) raf = requestAnimationFrame(tick);
+}
+function tick(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts = parts.filter(p=>p.life>0);
+  parts.forEach(p=>{
+    p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.vx*=.99; p.r+=p.vr; p.life--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+    ctx.globalAlpha = Math.min(1,p.life/40);
+    ctx.fillStyle = p.c;
+    if(p.heart){ ctx.font = p.s*2+'px serif'; ctx.fillText('♥',-p.s/1.2,p.s/2); }
+    else ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);
+    ctx.restore();
+  });
+  raf = parts.length ? requestAnimationFrame(tick) : null;
+  if(!parts.length) ctx.clearRect(0,0,cv.width,cv.height);
+}
+
+// ---------- capybara interaction ----------
+const capy = document.getElementById('capy'), bubble = document.getElementById('bubble');
+let bTimer, lastMsg = -1;
+function capyTalk(){
+  let i; do{ i = Math.floor(Math.random()*CONFIG.capySays.length); }while(i===lastMsg && CONFIG.capySays.length>1);
+  lastMsg = i;
+  bubble.textContent = CONFIG.capySays[i];
+  bubble.classList.add('show');
+  clearTimeout(bTimer); bTimer = setTimeout(()=>bubble.classList.remove('show'),2200);
+  const r = capy.getBoundingClientRect();
+  burst(r.left+r.width/2, r.top+r.height/3, 40);
+}
+capy.addEventListener('click', capyTalk);
+capy.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); capyTalk(); }});
+
+// ---------- countdown ----------
+const target = new Date(CONFIG.eventDateISO).getTime();
+const cd = document.getElementById('countdown');
+function updateCd(){
+  let diff = target - Date.now();
+  if(isNaN(target)) return;
+  if(diff<=0){
+    cd.innerHTML = '<div class="cd-done script">It\'s party time! 🎉</div>';
+    clearInterval(cdTimer); return;
+  }
+  const d = Math.floor(diff/864e5); diff%=864e5;
+  const h = Math.floor(diff/36e5); diff%=36e5;
+  const m = Math.floor(diff/6e4); diff%=6e4;
+  const s = Math.floor(diff/1e3);
+  document.getElementById('cd-d').textContent = d;
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+updateCd(); const cdTimer = setInterval(updateCd,1000);
+
+// ---------- message form ----------
+const form = document.getElementById('msgForm');
+const thanks = document.getElementById('thanks');
+const submitBtn = document.getElementById('submitBtn');
+const errEl = document.getElementById('formError');
+document.getElementById('thanksMsg').textContent = CONFIG.thanksMsg;
+
+form.addEventListener('submit', async e=>{
+  e.preventDefault();
+  errEl.textContent = '';
+  const name = document.getElementById('nameInput').value.trim();
+  const message = document.getElementById('msgInput').value.trim();
+  if(!name){ errEl.textContent = 'Please enter your name 💕'; document.getElementById('nameInput').focus(); return; }
+  if(!message){ errEl.textContent = 'Write a little something first 🎀'; document.getElementById('msgInput').focus(); return; }
+
+  submitBtn.disabled = true; submitBtn.textContent = 'Sending…';
+  try{
+    await MessageStore.add({ name, message, ts: Date.now() });
+    form.classList.add('hidden');
+    thanks.classList.remove('hidden');
+    burst(innerWidth/2, innerHeight/2, 120);
+  }catch(_){
+    errEl.textContent = "Oops, that didn't send. Please try again!";
+  }finally{
+    submitBtn.disabled = false; submitBtn.textContent = 'Send message 💌';
+  }
+});
+document.getElementById('againBtn').addEventListener('click', ()=>{
+  form.reset();
+  thanks.classList.add('hidden');
+  form.classList.remove('hidden');
+});
+
+// ---------- reveal on scroll ----------
+const io = new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} }),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
