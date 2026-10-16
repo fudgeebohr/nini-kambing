@@ -43,6 +43,7 @@
   .err{color:var(--pink-600);font-size:.9rem;min-height:1.2em}
   .hidden{display:none !important}
   .back{display:block;text-align:center;margin-top:22px;color:var(--pink-600)}
+  #backgroundMusic{display:block;width:100%;margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -62,6 +63,7 @@
 
   <!-- board -->
   <div id="board" class="hidden">
+    <audio id="backgroundMusic" src="audio/kambing.mp3" loop preload="auto"></audio>
     <div class="banner hidden" id="demoBanner">
       Demo mode: messages are only saved in the browser that sent them. Set <b>dbUrl</b> in <b>shared.js</b> to collect messages from all guests.
     </div>
@@ -87,6 +89,7 @@ const list = document.getElementById('list');
 
 function unlock(){
   gate.classList.add('hidden'); board.classList.remove('hidden');
+  document.getElementById('backgroundMusic').play().catch(()=>{});
   document.getElementById('demoBanner').classList.toggle('hidden', MessageStore.mode()==='online');
   load();
 }
