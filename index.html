@@ -361,7 +361,7 @@ const CONFIG = {
   age: "24",
 
   // Party start — ISO format with timezone offset (Manila = +08:00)
-  eventDateISO: "2026-10-17T15:00:00+08:00",
+  eventDateISO: "2026-10-17T16:00:00+08:00",
   dateText: "Saturday, October 17, 2026",
   timeText: "4:00 PM – 6:00 PM",
   venueName: "Private Town (Pass: kambing)",
@@ -501,12 +501,14 @@ capy.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preven
 // ---------- countdown ----------
 const target = new Date(CONFIG.eventDateISO).getTime();
 const cd = document.getElementById('countdown');
+let cdTimer;
 function updateCd(){
   let diff = target - Date.now();
   if(isNaN(target)) return;
   if(diff<=0){
     cd.innerHTML = '<div class="cd-done script">It\'s party time! 🎉</div>';
-    clearInterval(cdTimer); return;
+    if(cdTimer) clearInterval(cdTimer);
+    return;
   }
   const d = Math.floor(diff/864e5); diff%=864e5;
   const h = Math.floor(diff/36e5); diff%=36e5;
@@ -517,7 +519,8 @@ function updateCd(){
   document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
   document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
 }
-updateCd(); const cdTimer = setInterval(updateCd,1000);
+updateCd();
+if(target > Date.now()) cdTimer = setInterval(updateCd,1000);
 
 // ---------- message form ----------
 const form = document.getElementById('msgForm');
